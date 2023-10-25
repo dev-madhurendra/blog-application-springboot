@@ -1,0 +1,62 @@
+package com.blog.application.apis.services.serviceimpl;
+
+import com.blog.application.apis.dtos.UserDTO;
+import com.blog.application.apis.entities.User;
+import com.blog.application.apis.exceptions.ResourceNotFoundException;
+import com.blog.application.apis.repositories.UserRepository;
+import com.blog.application.apis.services.UserService;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class UserServiceImpl implements UserService {
+
+    private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
+
+    @Autowired
+    UserServiceImpl(UserRepository userRepository,ModelMapper modelMapper) {
+        this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
+    }
+
+    @Override
+    public UserDTO createUser(UserDTO userDTO) {
+        User savedUser = userRepository.save(modelMapper.map(userDTO,User.class));
+        return modelMapper.map(savedUser,UserDTO.class);
+    }
+
+    @Override
+    public UserDTO updateUser(UserDTO userDTO, Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User",id));
+        user.setName(userDTO.getName());
+        user.setEmail(userDTO.getEmail());
+        user.setAbout(userDTO.getAbout());
+        user.setPassword(userDTO.getPassword());
+
+        User updatedUser = userRepository.save(user);
+        return modelMapper.map(updatedUser,UserDTO.class);
+    }
+
+    @Override
+    public UserDTO getUserById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User",id));
+        return modelMapper.map(user,UserDTO.class);
+    }
+
+    @Override
+    public List<UserDTO> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream().map(user -> modelMapper.map(user,UserDTO.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User",id));
+        userRepository.delete(user);
+    }
+}
