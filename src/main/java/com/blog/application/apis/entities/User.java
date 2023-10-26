@@ -3,10 +3,13 @@ package com.blog.application.apis.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import com.blog.application.apis.utils.AppConstants;
 
 import java.io.Serializable;
 
@@ -30,6 +33,7 @@ public class User implements Serializable {
     private String email;
 
     @Size(min = 8, message = "Password must be at least 8 characters")
+    @Pattern(regexp = AppConstants.PASSWORD_PATTERN)
     private String password;
 
     @Size(max = 255, message = "About field should not exceed 255 characters")
