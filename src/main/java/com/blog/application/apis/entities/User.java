@@ -12,9 +12,11 @@ import lombok.Setter;
 import com.blog.application.apis.utils.AppConstants;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "user")
+@Table(name = AppConstants.USER)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,18 +26,21 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_name", nullable = false)
-    @NotBlank(message = "Name is required")
+    @Column(name = AppConstants.USER_NAME, nullable = false)
+    @NotBlank(message = AppConstants.USER_NAME_REQUIRED)
     private String name;
 
     @Column(unique = true)
-    @Email(message = "Invalid email format")
+    @Email(message = AppConstants.USER_EMAIL_INVALID)
     private String email;
 
-    @Size(min = 8, message = "Password must be at least 8 characters")
+    @Size(min = 8, message = AppConstants.PASSWORD_VALIDATION)
     @Pattern(regexp = AppConstants.PASSWORD_PATTERN)
     private String password;
 
-    @Size(max = 255, message = "About field should not exceed 255 characters")
+    @Size(max = 255, message = AppConstants.ABOUT_MESSAGE)
     private String about;
+
+    @OneToMany(mappedBy = AppConstants.USER,cascade = CascadeType.ALL)
+    private List<Post> posts = new ArrayList<>();
 }

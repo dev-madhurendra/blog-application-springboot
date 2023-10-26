@@ -13,3 +13,10 @@ spring:
         hibernate:
           dialect: org.hibernate.dialect.MySQL5Dialect
     show-sql: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+project:
+  image: images/

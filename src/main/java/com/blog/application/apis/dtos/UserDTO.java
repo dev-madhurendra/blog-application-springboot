@@ -1,5 +1,6 @@
 package com.blog.application.apis.dtos;
 
+import com.blog.application.apis.utils.AppConstants;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -15,18 +16,18 @@ public class UserDTO {
     private Long id;
 
     @NotNull
-    @NotBlank(message = "Name is required")
+    @NotBlank(message = AppConstants.USER_NAME_REQUIRED)
     private String name;
 
-    @Email(message = "Invalid email format")
+    @Email(message = AppConstants.USER_EMAIL_INVALID)
     private String email;
 
     @NotNull
-    @Size(min = 8, message = "Password must be at least 8 characters")
+    @Size(min = 8, message = AppConstants.PASSWORD_VALIDATION)
     private String password;
 
     @NotNull
-    @Size(max = 255, message = "About field should not exceed 255 characters")
+    @Size(max = 255, message = AppConstants.ABOUT_MESSAGE)
     private String about;
 
 }

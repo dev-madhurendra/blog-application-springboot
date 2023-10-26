@@ -1,5 +1,6 @@
 package com.blog.application.apis.dtos;
 
+import com.blog.application.apis.utils.AppConstants;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -14,9 +15,9 @@ import lombok.Setter;
 public class CategoryDTO {
 
     private Long categoryId;
-    @NotNull(message = "Title is required")
-    @Size(min = 4, max = 50, message = "Title must be between 1 and 50 characters")
+    @NotNull(message = AppConstants.CATEGORY_TITLE_REQUIRED)
+    @Size(min = 4, max = 50, message = AppConstants.CATEGORY_TITLE_SIZE)
     private String categoryTitle;
-    @Size(max = 255, message = "Description should not exceed 255 characters")
+    @Size(max = 255, message = AppConstants.CATEGORY_TITLE_DESCRIPTION)
     private String categoryDescription;
 }
