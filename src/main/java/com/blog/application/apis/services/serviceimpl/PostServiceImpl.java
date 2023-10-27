@@ -1,5 +1,6 @@
 package com.blog.application.apis.services.serviceimpl;
 
+import com.blog.application.apis.dtos.CommentDTO;
 import com.blog.application.apis.dtos.PostDTO;
 import com.blog.application.apis.entities.Category;
 import com.blog.application.apis.entities.Post;
@@ -23,13 +24,15 @@ public class PostServiceImpl implements PostService {
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final CommentServiceImpl commentService;
 
     @Autowired
-    PostServiceImpl(PostRepository postRepository,ModelMapper modelMapper,UserRepository userRepository,CategoryRepository categoryRepository) {
+    PostServiceImpl(PostRepository postRepository,ModelMapper modelMapper,UserRepository userRepository,CategoryRepository categoryRepository,CommentServiceImpl commentService) {
         this.postRepository = postRepository;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
+        this.commentService = commentService;
     }
 
     @Override
@@ -64,7 +67,12 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostDTO> getAllPost() {
         List<Post> posts = postRepository.findAll();
-        return posts.stream().map(post -> modelMapper.map(post,PostDTO.class)).collect(Collectors.toList());
+        return posts.stream().map(post -> {
+            List<CommentDTO> commentDTOList = commentService.getAllCommentsOfPost(post.getPostId());
+            PostDTO postDTO = modelMapper.map(post,PostDTO.class);
+            postDTO.setComments(commentDTOList);
+            return postDTO;
+        }).collect(Collectors.toList());
     }
 
     @Override
@@ -95,4 +103,5 @@ public class PostServiceImpl implements PostService {
                 .map(post -> modelMapper.map(post,PostDTO.class))
                 .collect(Collectors.toList());
     }
+
 }

@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,4 +31,5 @@ public class PostDTO {
     private CategoryDTO category;
     private String createdAt;
     private String updatedAt;
+    private List<CommentDTO> comments = new ArrayList<>();
 }
