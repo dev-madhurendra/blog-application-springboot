@@ -46,10 +46,5 @@ public class AppConstants {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String[] PUBLIC_URLS = {
             "/auth/**",
-            "/v3/api-docs",
-            "/v2/api-docs",
-            "/swagger-resources/**",
-            "/swagger-ui/**",
-            "/webjars/**"
     };
 }
