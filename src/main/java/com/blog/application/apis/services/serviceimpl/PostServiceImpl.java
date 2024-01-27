@@ -1,15 +1,16 @@
 package com.blog.application.apis.services.serviceimpl;
 
 import com.blog.application.apis.dtos.CommentDTO;
+import com.blog.application.apis.dtos.LikeDTO;
 import com.blog.application.apis.dtos.PostDTO;
-import com.blog.application.apis.entities.Category;
-import com.blog.application.apis.entities.Post;
-import com.blog.application.apis.entities.User;
+import com.blog.application.apis.entities.*;
 import com.blog.application.apis.exceptions.ResourceNotFoundException;
 import com.blog.application.apis.repositories.CategoryRepository;
 import com.blog.application.apis.repositories.PostRepository;
 import com.blog.application.apis.repositories.UserRepository;
+import com.blog.application.apis.services.LikeService;
 import com.blog.application.apis.services.PostService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
@@ -25,14 +27,16 @@ public class PostServiceImpl implements PostService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final CommentServiceImpl commentService;
+    private final LikeService likeService;
 
     @Autowired
-    PostServiceImpl(PostRepository postRepository,ModelMapper modelMapper,UserRepository userRepository,CategoryRepository categoryRepository,CommentServiceImpl commentService) {
+    PostServiceImpl(PostRepository postRepository, ModelMapper modelMapper, UserRepository userRepository, CategoryRepository categoryRepository, CommentServiceImpl commentService, LikeService likeService) {
         this.postRepository = postRepository;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
         this.commentService = commentService;
+        this.likeService = likeService;
     }
 
     @Override
@@ -71,6 +75,10 @@ public class PostServiceImpl implements PostService {
             List<CommentDTO> commentDTOList = commentService.getAllCommentsOfPost(post.getPostId());
             PostDTO postDTO = modelMapper.map(post,PostDTO.class);
             postDTO.setComments(commentDTOList);
+
+            List<LikeDTO> likeDTOList = likeService.getAllLikesByPostId(post.getPostId());
+            log.info(">>> " + likeDTOList);
+            postDTO.setLikes(likeDTOList);
             return postDTO;
         }).collect(Collectors.toList());
     }
@@ -78,7 +86,14 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostDTO getPostById(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post",postId));
-        return modelMapper.map(post,PostDTO.class);
+        List<CommentDTO> commentDTOList = commentService.getAllCommentsOfPost(postId);
+        List<LikeDTO> likeDTOList = likeService.getAllLikesByPostId(postId);
+        log.info(">>> getting all comments of post " + commentDTOList);
+        log.info(">>> getting all likes of post " + likeDTOList);
+        PostDTO postDTOs = modelMapper.map(post,PostDTO.class);
+        postDTOs.setComments(commentDTOList);
+        postDTOs.setLikes(likeDTOList);
+        return postDTOs;
     }
 
     @Override

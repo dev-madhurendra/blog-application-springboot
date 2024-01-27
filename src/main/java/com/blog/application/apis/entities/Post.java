@@ -53,4 +53,7 @@ public class Post implements Serializable {
     @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
     private List<Comment> comment = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Like> like = new ArrayList<>();
+
 }

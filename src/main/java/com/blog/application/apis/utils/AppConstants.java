@@ -31,4 +31,25 @@ public class AppConstants {
     public static final String CATEGORY_TABLE_ID = "category_id";
     public static final String USER_NAME = "user_name";
     public static final String USER = "user";
+    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+    public static final String LOGGED_IN_SUCCESSFULLY = "Logged in successfully !";
+    public static final String BASE_AUTH_URL = "/auth";
+    public static final String LOGIN = "/login";
+    public static final String REGISTER = "/register";
+    public static final String COMMENTS_BASE_URL = "/api/v1/comments";
+    public static final String COMMENTS_POST_URL= "/users/{userId}/posts/{postId}";
+    public static final String COMMENTS_GET_URL= "/posts/{postId}";
+    public static final String COMMENTS_DELETE_URL = "/{commentId}";
+    public static final String POST_UPLOAD_IMAGE_URL = "/{postId}/upload/image";
+    public static final String POST_DOWNLOAD_IMAGE = "/post/image/{imageName}";
+    public static final String LIKE_TABLE = "likes";
+    public static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String[] PUBLIC_URLS = {
+            "/auth/**",
+            "/v3/api-docs",
+            "/v2/api-docs",
+            "/swagger-resources/**",
+            "/swagger-ui/**",
+            "/webjars/**"
+    };
 }

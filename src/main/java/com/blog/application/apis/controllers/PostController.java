@@ -84,7 +84,7 @@ public class PostController {
         return new ResponseEntity<>(postDTOS,HttpStatus.OK);
     }
 
-    @PostMapping("/{postId}/upload/image")
+    @PostMapping(AppConstants.POST_UPLOAD_IMAGE_URL)
     public ResponseEntity<PostDTO> uploadPostImage(@RequestParam("image") MultipartFile image,@PathVariable Long postId) throws IOException {
         PostDTO postDTO = postService.getPostById(postId);
         String fileName = fileService.uploadImage(this.path,image);
@@ -93,7 +93,7 @@ public class PostController {
         return new ResponseEntity<>(updatedPost,HttpStatus.OK);
     }
 
-    @GetMapping(value = "/post/image/{imageName}",produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(value = AppConstants.POST_DOWNLOAD_IMAGE,produces = MediaType.IMAGE_JPEG_VALUE)
     public void downloadImage(@PathVariable("imageName") String imageName, HttpServletResponse res) throws IOException {
         InputStream resource = fileService.getResource(path,imageName);
         res.setContentType(MediaType.IMAGE_JPEG_VALUE);

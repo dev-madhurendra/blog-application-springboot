@@ -27,9 +27,10 @@ public class PostDTO {
 
     private String imageName = AppConstants.POST_IMAGE_DEFAULT;
 
-    private UserDTO user;
+    private RequestUser user;
     private CategoryDTO category;
     private String createdAt;
     private String updatedAt;
     private List<CommentDTO> comments = new ArrayList<>();
+    private List<LikeDTO> likes = new ArrayList<>();
 }
